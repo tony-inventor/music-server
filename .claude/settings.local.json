@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(C:/Program Files \\(x86\\)/Winamp/winamp.exe:*)",
+      "Bash(C:\\\\\\\\Program Files \\(x86\\)\\\\\\\\Winamp\\\\\\\\winamp.exe:*)",
+      "mcp__music-server__list_music_files",
+      "mcp__music-server__list_subfolders",
+      "mcp__music-server__winamp_play_file",
+      "mcp__music-server__winamp_pause",
+      "mcp__music-server__winamp_set_volume",
+      "Bash(start:*)",
+      "mcp__azure-postgresql-mcp__get_databases",
+      "mcp__azure-postgresql-mcp__get_schemas",
+      "mcp__azure-postgresql-mcp__query_data",
+      "mcp__azure-postgresql-mcp__update_values",
+      "mcp__music-server__winamp_play",
+      "Bash(/c/Program Files \\(x86\\)/Winamp/winamp.exe:*)",
+      "Bash(python:*)",
+      "mcp__music-server__winamp_next"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "music-server",
+    "azure-postgresql-mcp"
+  ]
+}
