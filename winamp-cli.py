@@ -3,7 +3,7 @@ import win32api
 import win32con
 import argparse
 import os
-import sys
+import sys 
 import time
 
 
@@ -123,13 +123,16 @@ def main():
         "action", type=str.upper, choices=WinampController.COMMAND_MAP.keys()
     )
     parser.add_argument("extra", nargs="?", default="1")
-    parser.add_argument(
-        "--ensure", "-e", action="store_true",
-        help="Launch Winamp if not running before executing command"
-    )
 
     args = parser.parse_args()
     player = WinampController()
+
+    # Ensure Winamp is running for all commands except LAUNCH
+    if args.action != "LAUNCH":
+        if not player.is_running():
+            if not player.launch():
+                print("Error: Could not find or launch Winamp.")
+                sys.exit(1)
 
     # Handle LAUNCH command
     if args.action == "LAUNCH":
@@ -142,17 +145,6 @@ def main():
                 print("Error: Could not find or launch Winamp.")
                 sys.exit(1)
         sys.exit(0)
-
-    # Auto-launch if --ensure flag is used
-    if args.ensure:
-        if not player.is_running():
-            if not player.launch():
-                print("Error: Could not find or launch Winamp.")
-                sys.exit(1)
-
-    if not player.hwnd:
-        print("Error: Winamp not running. Use --ensure to auto-launch or LAUNCH command.")
-        sys.exit(1)
 
     # 1. Handle Volume Set (e.g., "vol 10%")
     if args.action == "VOL":

@@ -9,8 +9,8 @@ import path from "path";
 const execFileAsync = promisify(execFile);
 
 // 👇 Adjust these paths
-const MUSIC_FOLDER = "H:\\M\\TYPE-Music\\music";
-const WINAMP_CLI = "H:\\M\\TYPE-Mcp\\music-server\\winamp-cli.py";
+const MUSIC_FOLDER = "C:\\Users\\anton\\Music";
+const WINAMP_CLI = "D:\\00_ROOT\\M\\TYPE-MCP\\music-server\\winamp-cli.py";
 
 const AUDIO_EXTENSIONS = [".mp3", ".flac", ".wav", ".aac", ".ogg", ".m4a", ".wma"];
 
@@ -25,7 +25,14 @@ async function runWinampCli(...args) {
   }
 }
 
+
 const server = new McpServer({ name: "music-server", version: "2.0.0" });
+
+// ── Launch ─────────────────────────────────────────────────────────────────
+
+server.tool("winamp_launch", "Launch Winamp if it is not already running", {}, async () => ({
+  content: [{ type: "text", text: await runWinampCli("launch") }],
+}));
 
 // ── Playback controls ──────────────────────────────────────────────────────
 
@@ -79,7 +86,7 @@ server.tool("winamp_volume_down", "Decrease Winamp volume by one step", {
 
 // ── File / library tools ───────────────────────────────────────────────────
 
-server.tool("winamp_play_file", "Play a specific music file in Winamp", {
+server.tool("winamp_play_file", "Play a specific music file in Winamp (launches Winamp automatically if needed)", {
   filepath: z.string().describe("Absolute or relative path to the music file"),
 }, async ({ filepath }) => {
   const abs = path.isAbsolute(filepath) ? filepath : path.join(MUSIC_FOLDER, filepath);
@@ -98,7 +105,7 @@ server.tool("list_music_files", "List all music files in the music folder", {
   }
   const files = fs.readdirSync(targetDir, { withFileTypes: true })
     .filter(f => f.isFile() && AUDIO_EXTENSIONS.includes(path.extname(f.name).toLowerCase()))
-    .map(f => path.resolve(targetDir, f.name)); // absolute path per file
+    .map(f => path.resolve(targetDir, f.name));
   return {
     content: [{
       type: "text",
